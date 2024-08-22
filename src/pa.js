@@ -1,57 +1,49 @@
 const problemKey  = "ProblemA";
-const numDisplay  = document.getElementById('numDisplay');
+const alphDisplay = document.getElementById('alphDisplay');
 const judgeResult = document.getElementById('judge-result');
 
-document.querySelectorAll('.num-btn').forEach(button => {
+document.querySelectorAll('.alph-btn').forEach(button => {
     button.addEventListener('click', function() {
-        // let numDisplay = document.getElementById('numDisplay');
-        numDisplay.value += this.textContent;
-    })
+        alphDisplay.value += this.textContent;
+    });
 });
 
-document.querySelector('.num-clear').addEventListener('click', function() {
-    // console.log('clear clicked');
-    numDisplay.value = "";
-});
-
-document.querySelector('.num-backspace').addEventListener('click', function() {
-    numDisplay.value = numDisplay.value.slice(0, -1);
-});
-
-document.querySelector('.num-enter').addEventListener('click', function() {
+document.querySelector('.alph-send').addEventListener('click', function() {
     judgeResult.innerHTML = "";
-    if(numDisplay.value === "")
+    if(alphDisplay.value === "")
         return;
 
-    // console.log(document.getElementById('judge-result'));
-    // console.log(generate("info"));
+    judgeResult.innerHTML = generate("info");
     axios.post('/axios/test', {
         problem: problemKey,
-        encrypt: numDisplay.value
+        encrypt: alphDisplay.value
     })
     .then(function (response) {
         if(response.data.accept === true){
-            // console.log(generate("success"));
             judgeResult.innerHTML = generate("success");
-            // judgeResult.children[0].innerHTML += `&nbsp&nbsp <button type="button" class="btn btn-outline-success" id="certificate">Download the certificate</button>`
-            judgeResult.children[0].innerHTML += `<hr> <a href="/certificate?arg=${response.data.secret}&p=${problemKey}" class="alert-link">Click here to download the certificate</a>`
-        }else if(response.data.accept === false){
-            // console.log(generate("danger"));
+            judgeResult.children[0].innerHTML += `<hr> <a href="/certificate?arg=${response.data.secret}&p=${problemKey}" class="alert-link">將成果帶回指揮部</a>`
+        }else{
             judgeResult.innerHTML = generate("danger");
         }
-        
     })
     .catch(function (err) {
         console.error(err);
-        judgeResult.innerHTML = generate("warning");
-    })
-    // .finally(function () {
-    //     console.log('hi ho');
-    // });
-    numDisplay.value = "";
-
+        judgeResult.innerHTML = generate('warning');
+    });
+    alphDisplay.value = "";
 });
 
+document.querySelectorAll('.alph-backspace').forEach(button => {
+    button.addEventListener('click', function() {
+        alphDisplay.value = alphDisplay.value.slice(0, -1);
+    });
+});
+
+document.querySelectorAll('.alph-clear').forEach(button => {
+    button.addEventListener('click', function() {
+        alphDisplay.value = "";
+    });
+});
 const coll = document.getElementsByClassName("collapsible");
 
 for (let i = 0; i < coll.length; i++) {
@@ -67,9 +59,9 @@ for (let i = 0; i < coll.length; i++) {
 }
 
 const judgeTable = {
-    info : "Judging...",
-    success: "Accepted!!",
-    danger: "Wrong Password",
+    info : "等待系統回應...",
+    success: "你有種預感，這組密碼與遺跡完美契合",
+    danger: "這組密碼好像沒太大反應...",
     warning: "Error! Please retry or ask the administrator"
 };
 
@@ -79,6 +71,5 @@ function generate(property){
             ${judgeTable[property]}
         </div>
     `;
-    // console.log(resultDisplay);
     return resultDisplay;
 }

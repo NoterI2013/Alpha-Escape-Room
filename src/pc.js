@@ -1,65 +1,54 @@
 const problemKey  = "ProblemC";
-const numDisplay  = document.getElementById('numDisplay');
+const alphDisplay = document.getElementById('alphDisplay');
 const judgeResult = document.getElementById('judge-result');
 
-document.querySelectorAll('.num-btn').forEach(button => {
+document.querySelectorAll('.alph-btn').forEach(button => {
     button.addEventListener('click', function() {
-        numDisplay.value += this.textContent;
-    })
+        alphDisplay.value += this.textContent;
+    });
 });
 
-document.querySelector('.num-clear').addEventListener('click', function() {
-    numDisplay.value = "";
-});
-
-document.querySelector('.num-backspace').addEventListener('click', function() {
-    numDisplay.value = numDisplay.value.slice(0, -1);
-});
-
-document.querySelector('.num-enter').addEventListener('click', function() {
+document.querySelector('.alph-send').addEventListener('click', function() {
     judgeResult.innerHTML = "";
-    if(numDisplay.value === "")
+    if(alphDisplay.value === "")
         return;
 
+    judgeResult.innerHTML = generate("info");
     axios.post('/axios/test', {
         problem: problemKey,
-        encrypt: numDisplay.value
+        encrypt: alphDisplay.value
     })
     .then(function (response) {
         if(response.data.accept === true){
             judgeResult.innerHTML = generate("success");
-            judgeResult.children[0].innerHTML += `<hr> <a href="/certificate?arg=${response.data.secret}&p=${problemKey}" class="alert-link">Click here to download the certificate</a>`
-        }else if(response.data.accept === false){
+            judgeResult.children[0].innerHTML += `<hr> <a href="/certificate?arg=${response.data.secret}&p=${problemKey}" class="alert-link">點擊查看</a>`
+        }else{
             judgeResult.innerHTML = generate("danger");
         }
-        
     })
     .catch(function (err) {
         console.error(err);
-        judgeResult.innerHTML = generate("warning");
-    })
-    numDisplay.value = "";
-
+        judgeResult.innerHTML = generate('warning');
+    });
+    alphDisplay.value = "";
 });
 
-const coll = document.getElementsByClassName("collapsible");
-
-for (let i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function() {
-        this.classList.toggle("active");
-        var content = this.nextElementSibling;
-        if (content.style.display === "block") {
-            content.style.display = "none";
-        } else {
-            content.style.display = "block";
-        }
+document.querySelectorAll('.alph-backspace').forEach(button => {
+    button.addEventListener('click', function() {
+        alphDisplay.value = alphDisplay.value.slice(0, -1);
     });
-}
+});
+
+document.querySelectorAll('.alph-clear').forEach(button => {
+    button.addEventListener('click', function() {
+        alphDisplay.value = "";
+    });
+});
 
 const judgeTable = {
-    info : "Judging...",
-    success: "Accepted!!",
-    danger: "Wrong Password",
+    info : "等待系統回應...",
+    success: "你成功了！ 咦？這是什麼？",
+    danger: "這方法似乎行不通... 換個方法試試（？",
     warning: "Error! Please retry or ask the administrator"
 };
 
