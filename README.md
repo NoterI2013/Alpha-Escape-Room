@@ -38,3 +38,25 @@ npm --version
 ```
 sudo apt-get install git
 ```
+Check whether git is installed
+```
+git --version
+```
+## Deployment
+1. clone this repository (You may need to ask the owner for access token)
+```
+git clone https://github.com/NoterI2013/Alpha-Escape-Room.git
+```
+2. install essential packages
+```
+cd Alpha-Escape-Room
+npm install
+```
+3. launch the server
+```
+node server.js
+```
+4. connect to the website by `<ip>:<port>` such as
+```
+localhost:3000
+```
