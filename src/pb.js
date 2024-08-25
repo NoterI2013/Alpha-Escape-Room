@@ -48,7 +48,7 @@ document.querySelectorAll('.alph-clear').forEach(button => {
 const judgeTable = {
     info : "等待系統回應...",
     success: "這次你很篤定，就是它了",
-    danger: "不祥的預感讓你猶豫不決，不知是否應該拿去領賞",
+    danger: "不祥的預感讓你猶豫不決，不知是否應該拿去領賞<hr> 魔法筆記本對你的答案十分抗拒，建議你再試試看",
     warning: "Error! Please retry or ask the administrator"
 };
 

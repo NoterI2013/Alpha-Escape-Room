@@ -48,7 +48,7 @@ document.querySelectorAll('.alph-clear').forEach(button => {
 const judgeTable = {
     info : "等待系統回應...",
     success: "你成功了！ 咦？這是什麼？",
-    danger: "這方法似乎行不通... 換個方法試試（？",
+    danger: "這方法似乎行不通... 換個方法試試（？<hr> 魔法筆記本對你的答案十分抗拒，建議你再試試看",
     warning: "Error! Please retry or ask the administrator"
 };
 

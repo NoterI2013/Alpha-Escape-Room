@@ -1,5 +1,6 @@
 const navInput  = document.getElementById('search-input');
 const navButton = document.getElementById('search-btn');
+const navForm   = document.getElementById('search-form')
 
 const pages = {
     10349 : "/pa",
@@ -8,6 +9,40 @@ const pages = {
     59439 : "/pd",
     43173 : "/pe"
 };
+
+navForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    redirectPage();
+});
+
+navButton.addEventListener('click', function () {
+    // const inputValue = navInput.value.trim();  // Get the value from the input field and trim any whitespace
+    // if (Object.prototype.hasOwnProperty.call(pages, inputValue)) {
+    //     window.location.href = pages[inputValue];
+    // } else {
+    //     localStorage.setItem('displayAlert', 'true');
+    //     window.location.href = '/';
+    // }
+    redirectPage();
+});
+
+function redirectPage(){
+    const inputValue = navInput.value.trim();  // Get the value from the input field and trim any whitespace
+    if (Object.prototype.hasOwnProperty.call(pages, inputValue)) {
+        window.location.href = pages[inputValue];
+    } else {
+        localStorage.setItem('displayAlert', 'true');
+        window.location.href = '/';
+    }
+}
+
+// On page load, check if the alert should be displayed
+if (window.location.pathname === '/' && localStorage.getItem('displayAlert') === 'true') {
+    setTimeout(() => {
+        displayAlertMessage();
+        localStorage.removeItem('displayAlert');
+    }, 150);
+}
 
 function displayAlertMessage() {
     const pinDisplay = document.getElementById('pin-display');
@@ -19,29 +54,4 @@ function displayAlertMessage() {
             </div>
         `;
     }
-}
-
-navButton.addEventListener('click', function () {
-    const inputValue = navInput.value.trim();  // Get the value from the input field and trim any whitespace
-    if (Object.prototype.hasOwnProperty.call(pages, inputValue)) {
-        // console.log(true);
-        window.location.href = pages[inputValue];
-    } else {
-        // console.log(false);
-        // Store a flag in localStorage to indicate that the alert should be displayed
-        localStorage.setItem('displayAlert', 'true');
-        // Redirect to the home page
-        window.location.href = '/';
-    }
-});
-
-// On page load, check if the alert should be displayed
-if (window.location.pathname === '/' && localStorage.getItem('displayAlert') === 'true') {
-    setTimeout(() => {
-        displayAlertMessage();
-        localStorage.removeItem('displayAlert');
-    }, 150);
-    // displayAlertMessage();
-    // Remove the flag so the alert is not shown on subsequent reloads
-    // localStorage.removeItem('displayAlert');
 }

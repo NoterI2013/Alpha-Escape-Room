@@ -48,7 +48,7 @@ document.querySelectorAll('.alph-clear').forEach(button => {
 const judgeTable = {
     info : "等待系統回應...",
     success: "你感覺現場出現一絲異樣，就像什麼東西要破繭而出一般...",
-    danger : "空氣寂靜得就像什麼都沒有發生一樣...",
+    danger : "空氣寂靜得就像什麼都沒有發生一樣...<hr> 魔法筆記本對你的答案十分抗拒，建議你再試試看",
     warning: "Error! Please retry or ask the administrator"
 };
 

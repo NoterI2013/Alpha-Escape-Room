@@ -61,7 +61,7 @@ for (let i = 0; i < coll.length; i++) {
 const judgeTable = {
     info : "等待系統回應...",
     success: "你有種預感，這組密碼與遺跡完美契合",
-    danger: "這組密碼好像沒太大反應...",
+    danger: "這組密碼好像沒太大反應...<hr> 魔法筆記本對你的答案十分抗拒，建議你再試試看",
     warning: "Error! Please retry or ask the administrator"
 };
 
