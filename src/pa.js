@@ -44,6 +44,7 @@ document.querySelectorAll('.alph-clear').forEach(button => {
         alphDisplay.value = "";
     });
 });
+
 const coll = document.getElementsByClassName("collapsible");
 
 for (let i = 0; i < coll.length; i++) {
