@@ -3,6 +3,7 @@ const app = express();
 const path = require('path');
 const dotenv = require('dotenv');
 dotenv.config();
+const { sha256 } = require('js-sha256');
 
 app.set('view engine', 'ejs');
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -46,10 +47,19 @@ app.get('/pe', function(req, res) {
 app.post('/axios/test', function(req, res) {
     let response_message = {}
     let answer_key = req.body.problem;
+
+    // Handle case where the environment variable does not exist
+    if (!Object.prototype.hasOwnProperty.call(process.env, answer_key)) {
+        return res.status(400).json({ error: "Invalid problem key" });
+    }
+
     let answer = (process.env)[answer_key];
-    let judge_result = answer === req.body.encrypt;
-    // console.log(req.body.problem, "input: ", req.body.encrypt, "; Judge Result: ", judge_result);
+    let user_password = sha256(req.body.encrypt);
+    let judge_result = answer === user_password;
+    // let judge_result = answer === req.body.encrypt;
+    // console.log(`${req.body.problem} | Raw Input: ${req.body.encrypt} \nsha256:  ${user_password} \nJudge Result:  ${judge_result}`);
     response_message.accept = judge_result;
+
     if(judge_result === true){
         secret_token_key = `${req.body.problem}_Secret`;
         response_message.secret = (process.env)[secret_token_key];
@@ -64,7 +74,10 @@ app.get('/certificate', function(req, res) {
         res.download(path.join(__dirname, `/private/${req.query.arg}`), file_name, (err) => {
             if (err) {
                 console.error(err);
-                res.status(500).send("Error! Please retry or ask the administrator");
+                // Ensure that this error response is only sent if no response was already sent
+                if (!res.headersSent) {
+                    res.status(500).send("Error! Please retry or ask the administrator");
+                }
             }
         });
     }else{
@@ -72,5 +85,8 @@ app.get('/certificate', function(req, res) {
     }
 });
 
-app.listen(3000);
-console.log("Server is listening on port 3000");
+app.listen(3000, () => {
+    console.log("Server is listening on port 3000");
+}).on('error', (err) => {
+    console.error("Server error:", err);
+});
